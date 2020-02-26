@@ -7,26 +7,29 @@
 /* code adapted from https://sahebg.github.io/computersceince/travelling-salesman-problem-c-program/ */
 
 int visited_cities[10], cost = 0;
- 
+
+//finds the nearest city to the current one that has not yet been visited
 int tsp (int c, float matrix[30][30], int numcities)
 {
 	int count, nearest_city = 999;
 	int minimum = 999, temp;
-	for(count = 0; count < numcities; count++) {
+	for(count = 0; count < numcities; count++) { //loops through matrix of cities
+		//checks that current city is not starting city and that the city has not yet been visited
 		if((matrix[c][count] != 0) && (visited_cities[count] == 0)) {
-			if(matrix[c][count] < minimum) {
+			if(matrix[c][count] < minimum) { //sets minimum to the lowest city distance
 				minimum = matrix[count][0] + matrix[c][count];
 			}
 			temp = matrix[c][count];
 			nearest_city = count;
 		}
 	}
-	if(minimum != 999) {
+	if(minimum != 999) { //activates if a closer city does exist
 		cost = cost + temp;
 	}
 	return nearest_city;
 }
- 
+
+//calculates the shortest path
 void minimum_cost(int city, float matrix[30][30], int numcities)
 {
 	int nearest_city;
@@ -34,13 +37,13 @@ void minimum_cost(int city, float matrix[30][30], int numcities)
 	printf("%d ", city + 1);
 	nearest_city = tsp(city, matrix, numcities);
 	
-	if (nearest_city == 999) {
+	if (nearest_city == 999) { //activates if all available cities have been visted
 		nearest_city = 0;
 		printf("%d", nearest_city + 1);
 		cost = cost + matrix[city][nearest_city];
 		return;
 	}
-	minimum_cost(nearest_city, matrix, numcities);
+	minimum_cost(nearest_city, matrix, numcities); //recursively calculates the smallest path until all cities are reached
 }
  
 
@@ -131,6 +134,7 @@ int main() {
 	return 0;
 }
 
+//Checks that recieved input is valid
 int getValidNumber(int min, int max) {
 		std::string num;
 		int number;
@@ -138,26 +142,26 @@ int getValidNumber(int min, int max) {
 		bool end_loop = false;
 		while (!end_loop) {
 			getline(std::cin, num);
-			if (num.empty()) {
+			if (num.empty()) { //branch if no input is given
 				isNumber = false;
 				std::cout << "No input was entered." << std::endl;
 			}
-			else {
-				for (unsigned int i = 0; i < num.length(); i++) {
-					if (!isdigit(num[i])) {
+			else { //validates if recieved input is a number, and only a  number
+				for (unsigned int i = 0; i < num.length(); i++) { 
+					if (!isdigit(num[i])) { //branch if any point in input is not a number
 						isNumber = false;
 						std::cout << "Only numbers between " << min << " and " << max << " can be given as input." << std::endl;
 						break;
 					}
-					else
+					else //branch if input is only digits
 						isNumber = true;
 				}
 			}
-			if (isNumber) {
+			if (isNumber) { 
 				number = stoi(num);
-				if (number >= min && number <= max)
+				if (number >= min && number <= max) //validates number is between acceptable min and max
 					end_loop = true;
-				else
+				else //branch if number is outside min and max
 					std::cout << "Only numbers between " << min << " and " << max << " can be given as input." << std::endl;
 			}
 		}
